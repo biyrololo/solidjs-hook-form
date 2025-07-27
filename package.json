@@ -1,0 +1,48 @@
+{
+  "name": "solidjs-hook-form",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "rollup -c ./rollup.config.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "biyrololo",
+  "license": "ISC",
+  "description": "Performant, flexible and extensible forms with easy-to-use validation for SolidJS.",
+  "keywords": [
+    "solid",
+    "solidjs",
+    "form",
+    "hooks",
+    "validation",
+    "zod"
+  ],
+  "dependencies": {
+    "solid-js": "^1.9.7",
+    "tslib": "^2.8.1",
+    "zod": "^4.0.10"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.9.7",
+    "zod": "^4.0.10"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "rollup": "^4.46.0",
+    "typescript": "^5.8.3"
+  },
+  "files": [
+    "dist"
+  ]
+}

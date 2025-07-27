@@ -1,0 +1,11 @@
+# Source files
+/src
+
+# Config files
+rollup.config.mjs
+tsconfig.json
+.gitignore
+.npmignore
+
+# Development folders
+/node_modules
