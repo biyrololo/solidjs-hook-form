@@ -33,7 +33,6 @@ export function useForm<T extends z.ZodObject>(schema: T): UseFormReturn<T> {
             return true;
         } else {
             setFormErrors(reconcile(initialFormState as FormErrors<T>));
-            console.log(result.error.issues);
             for (const issue of result.error.issues) {
                 const key = issue.path[0] as keyof FormDataType<T>;
                 setFormErrors(key as any, issue.message as any);
