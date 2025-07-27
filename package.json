@@ -11,6 +11,10 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/biyrololo/solidjs-hook-form.git"
+  },
   "scripts": {
     "build": "rollup -c ./rollup.config.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -46,3 +50,4 @@
     "dist"
   ]
 }
+
