@@ -7,6 +7,11 @@ export type FormDataType<T extends z.ZodObject> = z.infer<T>;
 // Form errors will be a partial record mapping field names to error messages
 export type FormErrors<T extends z.ZodObject> = Partial<Record<keyof FormDataType<T>, string>>;
 
+/**
+ * Represents the return type of the `useForm` hook.
+ * 
+ * Use `handleChange` with the same input name as the schema's property
+ */
 export interface UseFormReturn<T extends z.ZodObject> {
     form: FormDataType<T>;
     formErrors: FormErrors<T>;

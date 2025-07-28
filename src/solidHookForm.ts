@@ -4,6 +4,13 @@ import { createStore, reconcile } from "solid-js/store";
 import { UseFormReturn } from "./types";
 import { z } from "zod";
 
+/**
+ * Create a form controls and validation using Zod schema
+ * 
+ * Use `handleChange` with the same input name as the schema's property
+ * @param {z.ZodObject} schema 
+ * @returns {UseFormReturn}
+ */
 export function useForm<T extends z.ZodObject>(schema: T): UseFormReturn<T> {
     // Infer the shape and get the keys for initialization
     const formKeys = Object.keys(schema.shape) as (keyof FormDataType<T>)[];
@@ -23,6 +30,8 @@ export function useForm<T extends z.ZodObject>(schema: T): UseFormReturn<T> {
         // Check if the input name is a valid form key before setting the state
         if (name in schema.shape) {
             setForm(name as any, value as any);
+        } else {
+            console.error("Invalid input name:", name);
         }
     };
 
@@ -34,8 +43,12 @@ export function useForm<T extends z.ZodObject>(schema: T): UseFormReturn<T> {
         } else {
             setFormErrors(reconcile(initialFormState as FormErrors<T>));
             for (const issue of result.error.issues) {
-                const key = issue.path[0] as keyof FormDataType<T>;
-                setFormErrors(key as any, issue.message as any);
+                if(issue.path[0]) {
+                    const key = issue.path[0] as keyof FormDataType<T>;
+                    setFormErrors(key as any, issue.message as any);
+                } else {
+                    console.error("No path found for issue:", issue);
+                }
             }
             return false;
         }

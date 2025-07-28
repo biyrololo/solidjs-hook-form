@@ -133,4 +133,112 @@ export default function RegisterForm() {
         </form>
     );
 }
+
+```
+
+Another example with custom inputs:
+```ts
+import { DialogFooter, DialogHeader, DialogTitle } from "@/shared/ui/dialog";
+import { TextField, TextFieldErrorMessage, TextFieldLabel, TextFieldRoot } from "@/shared/ui/textfield";
+
+import { Button } from "@/shared/ui/button";
+import { TextFieldPassword } from "@/shared/ui/textfieldPassword";
+import { api } from "@/shared/api";
+import { useForm } from "solidjs-hook-form";
+import z from "zod";
+
+const schema = z.object({
+    login: 
+        z.string()
+        .email()
+        .min(6)
+        .max(30),
+    password: 
+        z.string()
+        .min(6)
+        .max(30),
+    passwordRepeat: 
+        z.string()
+}).superRefine(({ password, passwordRepeat }, ctx) => {
+    if(password !== passwordRepeat) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Passwords do not match",
+            path: ["passwordRepeat"]
+        })
+    }
+})
+
+export default function RegisterForm() {
+    const { form, formErrors, handleChange, validate } = useForm(schema);
+
+    const handleRegister = () => {
+        if(validate()) {
+            api.register(form);
+        }
+    }
+    
+    return (
+        <>
+            <DialogHeader>
+                <DialogTitle class="text-center">Register</DialogTitle>
+            </DialogHeader>
+            <div class="grid gap-4 py-4">
+                <TextFieldRoot 
+                class="grid grid-cols-3 items-center gap-x-4 md:grid-cols-4"
+                validationState={formErrors.login ? "invalid" : "valid"}
+                >
+                    <TextFieldLabel class="text-right">Login</TextFieldLabel>
+                    <TextField 
+                    class="col-span-2 md:col-span-3" 
+                    placeholder={"email@example.com"}
+                    value={form.login}
+                    name="login" // name is required and must match the schema
+                    onInput={handleChange}
+                    />
+                    <TextFieldErrorMessage class="col-span-2 col-start-2">{formErrors.login}</TextFieldErrorMessage>
+                </TextFieldRoot>
+                <TextFieldRoot 
+                validationState={formErrors.password ? "invalid" : "valid"}
+                class="grid grid-cols-3 items-center gap-x-4 md:grid-cols-4"
+                >
+                    <TextFieldLabel class="text-right">Password</TextFieldLabel>
+                    <TextFieldPassword
+                    wrapper={{ class: "col-span-2 md:col-span-3" }}
+                    textfield={{
+                        name: "password", // name is required and must match the schema
+                        value: form.password,
+                        onInput: handleChange
+                    }} />
+                    <TextFieldErrorMessage class="col-span-2 col-start-2">{formErrors.password}</TextFieldErrorMessage>
+                </TextFieldRoot>
+                <TextFieldRoot 
+                validationState={formErrors.passwordRepeat ? "invalid" : "valid"}
+                class="grid grid-cols-3 items-center gap-x-4 md:grid-cols-4"
+                >
+                    <TextFieldLabel class="text-right">Password Repeat</TextFieldLabel>
+                    <TextFieldPassword
+                    wrapper={{ class: "col-span-2 md:col-span-3" }}
+                    textfield={{
+                        name: "passwordRepeat", // name is required and must match the schema
+                        value: form.passwordRepeat,
+                        onInput: handleChange
+                    }} />
+                    <TextFieldErrorMessage class="col-span-2 col-start-2">{formErrors.passwordRepeat}</TextFieldErrorMessage>
+                </TextFieldRoot>
+            </div>
+            <div class="flex justify-between">
+                <Button variant={'link'} href="/login">
+                    Already have an account?
+                </Button>
+                <Button variant={'link'} href="/reset-password">
+                    Forgot password?
+                </Button>
+            </div>
+            <DialogFooter>
+                <Button onClick={handleRegister} type="submit" class="w-full" variant={"default"}>Register</Button>
+            </DialogFooter>
+        </>
+    )
+}
 ```
